@@ -59,7 +59,7 @@ struct AuthView: View {
 
     private var header: some View {
         VStack(alignment: .leading, spacing: Theme.Space.xl) {
-            KasumiLogo(markSize: 44)
+            KasumiLogo(markSize: 56)
             VStack(alignment: .leading, spacing: Theme.Space.s) {
                 Text("Turn a photo into a short video with a camera move")
                     .font(.system(size: 30, weight: .medium))

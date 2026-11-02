@@ -24,7 +24,7 @@ struct StoreView: View {
                 .animation(Theme.ease(0.3), value: viewModel.credits)
             }
 
-            Section("Top up") {
+            Section {
                 if viewModel.isLoading {
                     ProgressView().frame(maxWidth: .infinity)
                 } else if viewModel.products.isEmpty {
@@ -38,6 +38,8 @@ struct StoreView: View {
                         productRow(product)
                     }
                 }
+            } header: {
+                Text("Top up").textCase(nil)
             }
 
             Section {

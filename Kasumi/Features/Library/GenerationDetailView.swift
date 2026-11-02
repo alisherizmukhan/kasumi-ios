@@ -63,7 +63,7 @@ struct GenerationDetailView: View {
             .padding(Theme.Space.l)
         }
         .screenBackground()
-        .navigationTitle(generation.title)
+        .navigationTitle("")
         .navigationBarTitleDisplayMode(.inline)
         .onAppear {
             guard player == nil, let url = generation.videoURL else { return }

@@ -30,7 +30,7 @@ struct ProfileView: View {
                         .padding(.vertical, Theme.Space.xs)
                     }
 
-                    Section("Balance") {
+                    Section {
                         row("Credits", value: "\(user.credits)", mono: true)
                         row("Plan", value: user.plan.title)
                         if app.config.storeEnabled {
@@ -46,6 +46,8 @@ struct ProfileView: View {
                                 }
                             }
                         }
+                    } header: {
+                        Text("Balance").textCase(nil)
                     }
                 }
 
@@ -54,7 +56,7 @@ struct ProfileView: View {
                     row("Store", value: app.config.storeEnabled ? "On" : "Off")
                     row("Max prompt length", value: "\(app.config.maxPromptLength)", mono: true)
                 } header: {
-                    Text("Remote config")
+                    Text("Remote config").textCase(nil)
                 } footer: {
                     Text("Feature flags come from the server and change without an app update")
                 }

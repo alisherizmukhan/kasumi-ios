@@ -73,7 +73,7 @@ struct CreateView: View {
                 }
                 .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.panel, style: .continuous))
                 .overlay { ViewfinderMarks() }
-                .overlay(alignment: .bottomTrailing) {
+                .overlay(alignment: .bottom) {
                     Button { viewModel.removeImage() } label: {
                         Text("Replace")
                             .font(.footnote.weight(.medium))
@@ -83,7 +83,7 @@ struct CreateView: View {
                             .background(Theme.background.opacity(0.8), in: RoundedRectangle(cornerRadius: 8, style: .continuous))
                     }
                     .buttonStyle(.plain)
-                    .padding(Theme.Space.l + Theme.Space.s)
+                    .padding(.bottom, Theme.Space.l)
                 }
         } else {
             VStack(spacing: Theme.Space.l) {
