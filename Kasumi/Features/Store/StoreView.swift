@@ -9,8 +9,8 @@ struct StoreView: View {
     }
 
     var body: some View {
-        List {
-            Section {
+        ScrollView {
+            VStack(alignment: .leading, spacing: Theme.Space.xl) {
                 VStack(alignment: .leading, spacing: Theme.Space.xs) {
                     Text("\(viewModel.credits)")
                         .font(.system(size: 40, weight: .medium).monospacedDigit())
@@ -20,37 +20,33 @@ struct StoreView: View {
                         .font(.subheadline)
                         .foregroundStyle(Theme.textSecondary)
                 }
-                .padding(.vertical, Theme.Space.s)
+                .padding(.horizontal, Theme.Space.l)
                 .animation(Theme.ease(0.3), value: viewModel.credits)
-            }
 
-            Section {
-                if viewModel.isLoading {
-                    ProgressView().frame(maxWidth: .infinity)
-                } else if viewModel.products.isEmpty {
-                    ContentUnavailableView(
-                        "Store unavailable",
-                        systemImage: "cart",
-                        description: Text("Run from Xcode with Products.storekit to test purchases")
-                    )
-                } else {
-                    ForEach(viewModel.products, id: \.id) { product in
-                        productRow(product)
+                GroupedSection(
+                    header: "Top up",
+                    footer: "Payments go through Apple. Credits are added to your Kasumi account and work on the web too."
+                ) {
+                    if viewModel.isLoading {
+                        ProgressView()
+                            .frame(maxWidth: .infinity, minHeight: 96)
+                    } else if viewModel.products.isEmpty {
+                        ContentUnavailableView(
+                            "Store unavailable",
+                            systemImage: "cart",
+                            description: Text("Run from Xcode with Products.storekit to test purchases")
+                        )
+                    } else {
+                        ForEach(Array(viewModel.products.enumerated()), id: \.element.id) { index, product in
+                            if index > 0 { RowDivider() }
+                            productRow(product)
+                        }
                     }
                 }
-            } header: {
-                Text("Top up")
             }
-            .textCase(nil)
-
-            Section {
-            } footer: {
-                Text("Payments go through Apple. Credits are added to your Kasumi account and work on the web too.")
-            }
+            .padding(.horizontal, Theme.Space.l)
+            .padding(.vertical, Theme.Space.s)
         }
-        .listStyle(.insetGrouped)
-        .textCase(nil)
-        .scrollContentBackground(.hidden)
         .screenBackground()
         .navigationTitle("Buy credits")
         .navigationBarTitleDisplayMode(.inline)
@@ -82,6 +78,6 @@ struct StoreView: View {
             .frame(width: 96)
             .disabled(viewModel.purchasingID != nil)
         }
-        .padding(.vertical, Theme.Space.xs)
+        .padding(Theme.Space.l)
     }
 }
