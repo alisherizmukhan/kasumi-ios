@@ -6,7 +6,7 @@ LumenWidgets/Info.plist
 # Build output
 build/
 DerivedData/
-screenshots/
+/screenshots/
 *.xcresult
 
 # Xcode / macOS
