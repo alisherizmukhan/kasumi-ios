@@ -1,4 +1,4 @@
-name: Lumen
+name: Kasumi
 
 options:
   bundleIdPrefix: com.alisherizmukhan
@@ -15,19 +15,20 @@ settings:
     DEVELOPMENT_TEAM: ""
 
 targets:
-  Lumen:
+  Kasumi:
     type: application
     platform: iOS
     sources:
-      - path: Lumen
+      - path: Kasumi
       - path: Shared
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.alisherizmukhan.Lumen
+        PRODUCT_BUNDLE_IDENTIFIER: com.alisherizmukhan.Kasumi
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
     info:
-      path: Lumen/Info.plist
+      path: Kasumi/Info.plist
       properties:
-        CFBundleDisplayName: Lumen
+        CFBundleDisplayName: Kasumi
         UILaunchScreen: {}
         UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
         NSSupportsLiveActivities: true
@@ -35,33 +36,33 @@ targets:
         NSPhotoLibraryAddUsageDescription: Save your generated videos to Photos.
         UIBackgroundModes: [remote-notification]
     dependencies:
-      - target: LumenWidgets
+      - target: KasumiWidgets
     scheme:
-      testTargets: [LumenTests]
+      testTargets: [KasumiTests]
       storeKitConfiguration: StoreKit/Products.storekit
 
-  LumenWidgets:
+  KasumiWidgets:
     type: app-extension
     platform: iOS
     sources:
-      - path: LumenWidgets
+      - path: KasumiWidgets
       - path: Shared
     settings:
       base:
-        PRODUCT_BUNDLE_IDENTIFIER: com.alisherizmukhan.Lumen.Widgets
+        PRODUCT_BUNDLE_IDENTIFIER: com.alisherizmukhan.Kasumi.Widgets
     info:
-      path: LumenWidgets/Info.plist
+      path: KasumiWidgets/Info.plist
       properties:
-        CFBundleDisplayName: Lumen
+        CFBundleDisplayName: Kasumi
         NSExtension:
           NSExtensionPointIdentifier: com.apple.widgetkit-extension
 
-  LumenTests:
+  KasumiTests:
     type: bundle.unit-test
     platform: iOS
-    sources: [LumenTests]
+    sources: [KasumiTests]
     settings:
       base:
         GENERATE_INFOPLIST_FILE: YES
     dependencies:
-      - target: Lumen
+      - target: Kasumi

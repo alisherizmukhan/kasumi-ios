@@ -3,8 +3,8 @@
 set -euo pipefail
 
 UDID="$1"
-APP="build/Build/Products/Debug-iphonesimulator/Lumen.app"
-BUNDLE_ID="com.alisherizmukhan.Lumen"
+APP="build/Build/Products/Debug-iphonesimulator/Kasumi.app"
+BUNDLE_ID="com.alisherizmukhan.Kasumi"
 OUT="screenshots"
 
 mkdir -p "$OUT"

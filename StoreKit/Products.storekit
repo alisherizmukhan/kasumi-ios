@@ -15,7 +15,7 @@
           "locale" : "en_US"
         }
       ],
-      "productID" : "lumen.credits.100",
+      "productID" : "kasumi.credits.100",
       "referenceName" : "100 Credits",
       "type" : "Consumable"
     },
@@ -30,7 +30,7 @@
           "locale" : "en_US"
         }
       ],
-      "productID" : "lumen.credits.500",
+      "productID" : "kasumi.credits.500",
       "referenceName" : "500 Credits",
       "type" : "Consumable"
     }
@@ -49,7 +49,7 @@
       "localizations" : [
 
       ],
-      "name" : "Lumen Pro",
+      "name" : "Kasumi Pro",
       "subscriptions" : [
         {
           "adHocOffers" : [
@@ -66,13 +66,13 @@
           "localizations" : [
             {
               "description" : "300 credits every month + priority queue",
-              "displayName" : "Lumen Pro",
+              "displayName" : "Kasumi Pro",
               "locale" : "en_US"
             }
           ],
-          "productID" : "lumen.pro.monthly",
+          "productID" : "kasumi.pro.monthly",
           "recurringSubscriptionPeriod" : "P1M",
-          "referenceName" : "Lumen Pro Monthly",
+          "referenceName" : "Kasumi Pro Monthly",
           "subscriptionGroupID" : "21500001",
           "type" : "RecurringSubscription"
         }

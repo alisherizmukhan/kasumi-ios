@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="96" height="96" role="img" aria-label="Kasumi">
+  <!-- Same geometry as KasumiMark in Shared/Brand.swift: a sun with two bands of mist in front of it -->
+  <defs>
+    <mask id="mist">
+      <rect width="100" height="100" fill="white"/>
+      <rect x="7" y="55" width="72" height="14" rx="7" fill="black"/>
+      <rect x="25" y="67" width="68" height="14" rx="7" fill="black"/>
+    </mask>
+  </defs>
+  <g fill="#F2A65A">
+    <circle cx="48" cy="46" r="24" mask="url(#mist)"/>
+    <rect x="10" y="58" width="66" height="8" rx="4"/>
+    <rect x="28" y="70" width="62" height="8" rx="4"/>
+  </g>
+</svg>

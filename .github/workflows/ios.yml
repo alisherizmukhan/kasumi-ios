@@ -37,8 +37,8 @@ jobs:
         run: |
           set -o pipefail
           xcodebuild test \
-            -project Lumen.xcodeproj \
-            -scheme Lumen \
+            -project Kasumi.xcodeproj \
+            -scheme Kasumi \
             -destination "id=${{ steps.sim.outputs.udid }}" \
             -derivedDataPath build \
             CODE_SIGNING_ALLOWED=NO \

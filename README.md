@@ -1,8 +1,10 @@
-# Lumen: AI video generation app (iOS MVP)
+<img src="docs/logo.svg" width="64" alt="Kasumi logo">
 
-[![iOS CI](https://github.com/alisherizmukhan/lumen-ios/actions/workflows/ios.yml/badge.svg)](https://github.com/alisherizmukhan/lumen-ios/actions/workflows/ios.yml)
+# Kasumi: AI video generation app (iOS MVP)
 
-Lumen turns a photo into a short cinematic video. You pick a photo, choose a trending preset or write a prompt, and the app follows the render until the video is ready.
+[![iOS CI](https://github.com/alisherizmukhan/kasumi-ios/actions/workflows/ios.yml/badge.svg)](https://github.com/alisherizmukhan/kasumi-ios/actions/workflows/ios.yml)
+
+Kasumi turns a photo into a short cinematic video. You pick a photo, choose a trending preset or write a prompt, and the app follows the render until the video is ready.
 
 This is the first MVP of a consumer generative-video app, built with SwiftUI + UIKit interop, Swift 6 strict concurrency, and iOS 17+.
 
@@ -24,7 +26,7 @@ This is the first MVP of a consumer generative-video app, built with SwiftUI + U
 | Sign in with Apple, Google, email (one account shared with web) | Credits and videos follow the user everywhere | `Features/Auth`, `AppModel` |
 | Server-driven home with presets and trends | Marketing changes the screen without an app release | `Models/HomeScreen.swift`, `Features/Home` |
 | Create: photo from gallery or camera + preset or prompt | The main mobile flow | `Features/Create` |
-| Generation status, notification and Live Activity | Rendering takes minutes, so the user shouldn't have to wait in the app | `Core/Generation`, `LumenWidgets` |
+| Generation status, notification and Live Activity | Rendering takes minutes, so the user shouldn't have to wait in the app | `Core/Generation`, `KasumiWidgets` |
 | Library with a video player | The reason users come back | `Features/Library` |
 | Save to Photos and share | Sharing is how the product grows | `GenerationDetailView` |
 | Credits and subscription (StoreKit 2) | Revenue | `Features/Store` |
@@ -33,7 +35,7 @@ This is the first MVP of a consumer generative-video app, built with SwiftUI + U
 ## Architecture
 
 ```
-Lumen/
+Kasumi/
 ├── App/            entry point, AppModel (session, balance, config, tab routing), demo mode
 ├── Core/
 │   ├── Networking/ APIClient: typed endpoints, auth, token refresh, retries, caching
@@ -44,9 +46,9 @@ Lumen/
 ├── Features/       one folder per screen: View + ViewModel (MVVM, @Observable)
 ├── Models/         Codable, Sendable value types
 └── UI/             theme and shared components
-LumenWidgets/       Live Activity (Lock Screen + Dynamic Island)
+KasumiWidgets/       Live Activity (Lock Screen + Dynamic Island)
 Shared/             ActivityAttributes shared by the app and the extension
-LumenTests/         unit tests
+KasumiTests/         unit tests
 ```
 
 **MVVM with `@Observable`.** Views only lay out content and bind to state. ViewModels are `@MainActor` classes that own a screen's state and actions. `AppModel` holds only what several screens share.
@@ -87,10 +89,10 @@ Requires Xcode 16+ and [XcodeGen](https://github.com/yonaskolb/XcodeGen). The pr
 ```bash
 brew install xcodegen
 xcodegen generate
-open Lumen.xcodeproj
+open Kasumi.xcodeproj
 ```
 
-Run the `Lumen` scheme on an iPhone simulator. Purchases work locally with `StoreKit/Products.storekit`, which the scheme already references.
+Run the `Kasumi` scheme on an iPhone simulator. Purchases work locally with `StoreKit/Products.storekit`, which the scheme already references.
 
 On the sign-in screen, use **Continue with Google** or any email with a password of 6+ characters. Sign in with Apple needs a signed build with the capability enabled.
 
@@ -99,7 +101,7 @@ On the sign-in screen, use **Continue with Google** or any email with a password
 ## Tests and CI
 
 ```bash
-xcodebuild test -project Lumen.xcodeproj -scheme Lumen -destination 'platform=iOS Simulator,name=iPhone 16'
+xcodebuild test -project Kasumi.xcodeproj -scheme Kasumi -destination 'platform=iOS Simulator,name=iPhone 16'
 ```
 
 On every push, GitHub Actions generates the project, builds it, runs the tests and captures simulator screenshots, which you can download as a build artifact.
