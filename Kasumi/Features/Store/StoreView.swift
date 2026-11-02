@@ -39,8 +39,9 @@ struct StoreView: View {
                     }
                 }
             } header: {
-                Text("Top up").textCase(nil)
+                Text("Top up")
             }
+            .textCase(nil)
 
             Section {
             } footer: {

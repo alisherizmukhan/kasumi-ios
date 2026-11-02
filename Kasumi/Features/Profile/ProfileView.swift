@@ -47,8 +47,9 @@ struct ProfileView: View {
                             }
                         }
                     } header: {
-                        Text("Balance").textCase(nil)
+                        Text("Balance")
                     }
+                    .textCase(nil)
                 }
 
                 Section {
@@ -56,10 +57,11 @@ struct ProfileView: View {
                     row("Store", value: app.config.storeEnabled ? "On" : "Off")
                     row("Max prompt length", value: "\(app.config.maxPromptLength)", mono: true)
                 } header: {
-                    Text("Remote config").textCase(nil)
+                    Text("Remote config")
                 } footer: {
                     Text("Feature flags come from the server and change without an app update")
                 }
+                .textCase(nil)
 
                 Section {
                     Button("Sign out") { app.signOut() }
