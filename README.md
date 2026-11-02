@@ -19,6 +19,20 @@ This is the first MVP of a consumer generative-video app, built with SwiftUI + U
   <img src="docs/screenshots/profile.png" width="200" alt="Profile">
 </p>
 
+## Design
+
+*Kasumi* (霞) is the haze that hangs over a landscape at dawn.
+
+- **The interface stays quiet.** Surfaces use a neutral graphite palette, so the user's photos and videos carry the color.
+- **One accent.** A warm amber, the light coming through the haze, marks selection, progress and the logo.
+- **The logo.** A sun with two bands of mist passing in front of it, after the *suyari-gasumi* bands in Japanese screen painting. It is drawn in code (`KasumiMark` in `Shared/Brand.swift`) and reused for the app icon (`scripts/make_icon.py`) and the Live Activity.
+- **A signature detail.** Viewfinder corner marks frame the photo you're about to animate.
+- **Type and motion.**
+  - System type at regular and medium weights.
+  - Monospaced figures for credits and progress.
+  - Spacing on a 4pt grid.
+  - One easing curve for every animation.
+
 ## MVP scope
 
 | Feature | Why it's in the MVP | Where |
