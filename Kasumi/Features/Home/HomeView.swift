@@ -10,11 +10,14 @@ struct HomeView: View {
     }
 
     var body: some View {
-        NavigationStack {
+        NavigationStack(path: $viewModel.path) {
             content
                 .screenBackground()
                 .navigationTitle("Kasumi")
                 .creditsToolbar(app.user?.credits)
+                .navigationDestination(for: Preset.self) { preset in
+                    PresetDetailView(preset: preset) { viewModel.use(preset) }
+                }
         }
         .task { await viewModel.loadIfNeeded() }
     }
@@ -55,10 +58,15 @@ struct HomeSectionView: View {
     let section: HomeSection
     let onSelect: @MainActor (Preset) -> Void
 
-    private let gridColumns = [
-        GridItem(.flexible(), spacing: Theme.Space.m),
-        GridItem(.flexible(), spacing: Theme.Space.m),
-    ]
+    @Environment(\.isWideLayout) private var isWide
+
+    /// Two columns on a phone, as many as fit on iPhone Duo's inner display.
+    private var gridColumns: [GridItem] {
+        if isWide {
+            return [GridItem(.adaptive(minimum: 160), spacing: Theme.Space.m)]
+        }
+        return [GridItem(.flexible(), spacing: Theme.Space.m), GridItem(.flexible(), spacing: Theme.Space.m)]
+    }
 
     var body: some View {
         switch section {
@@ -103,10 +111,11 @@ struct HomeSectionView: View {
 struct HeroCard: View {
     let hero: HomeSection.Hero
     let onSelect: @MainActor (Preset) -> Void
+    @Environment(\.isWideLayout) private var isWide
 
     var body: some View {
         RemoteImage(url: hero.imageURL)
-            .frame(height: 280)
+            .frame(height: isWide ? 320 : 280)
             .overlay(alignment: .bottomLeading) {
                 VStack(alignment: .leading, spacing: Theme.Space.s) {
                     if hero.preset?.tag != nil {
@@ -122,7 +131,7 @@ struct HeroCard: View {
                         .foregroundStyle(.white.opacity(0.75))
                     if let preset = hero.preset {
                         Button { onSelect(preset) } label: {
-                            Text("Use preset")
+                            Text("See preset")
                                 .font(.subheadline.weight(.medium))
                                 .foregroundStyle(Theme.background)
                                 .padding(.horizontal, Theme.Space.l)
@@ -133,11 +142,15 @@ struct HeroCard: View {
                         .padding(.top, Theme.Space.s)
                     }
                 }
-                .padding(Theme.Space.l)
+                .padding(isWide ? Theme.Space.xl : Theme.Space.l)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(ImageScrim())
             }
             .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.panel, style: .continuous))
+            .contentShape(RoundedRectangle(cornerRadius: Theme.Radius.panel, style: .continuous))
+            .onTapGesture {
+                if let preset = hero.preset { onSelect(preset) }
+            }
     }
 }
 

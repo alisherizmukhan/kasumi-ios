@@ -13,15 +13,16 @@ concurrency:
 jobs:
   build-test:
     name: Build, test & screenshots
-    runs-on: macos-15
-    timeout-minutes: 45
+    # Xcode 27.1 ships the iOS 27.1 SDK. Apps built with older SDKs run letterboxed on iPhone Duo.
+    runs-on: xcode-27
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v4
 
-      - name: Xcode version
+      - name: Xcode and simulators
         run: |
           xcodebuild -version
-          xcrun --sdk iphonesimulator --show-sdk-version
+          xcrun simctl list runtimes
 
       - name: Install tools
         run: brew install xcodegen xcbeautify
@@ -29,9 +30,11 @@ jobs:
       - name: Generate Xcode project
         run: xcodegen generate
 
-      - name: Pick simulator
+      - name: Pick simulators
         id: sim
-        run: echo "udid=$(python3 scripts/pick_simulator.py)" >> "$GITHUB_OUTPUT"
+        run: |
+          echo "iphone=$(python3 scripts/pick_simulator.py 'iPhone 18 Pro' || python3 scripts/pick_simulator.py)" >> "$GITHUB_OUTPUT"
+          echo "duo=$(python3 scripts/pick_simulator.py 'iPhone Duo' || true)" >> "$GITHUB_OUTPUT"
 
       - name: Build & run tests
         run: |
@@ -39,13 +42,18 @@ jobs:
           xcodebuild test \
             -project Kasumi.xcodeproj \
             -scheme Kasumi \
-            -destination "id=${{ steps.sim.outputs.udid }}" \
+            -destination "id=${{ steps.sim.outputs.iphone }}" \
             -derivedDataPath build \
             CODE_SIGNING_ALLOWED=NO \
             | xcbeautify --renderer github-actions
 
-      - name: Capture screenshots
-        run: bash scripts/screenshots.sh "${{ steps.sim.outputs.udid }}"
+      - name: Screenshots on iPhone
+        run: bash scripts/screenshots.sh "${{ steps.sim.outputs.iphone }}" screenshots/iphone
+
+      - name: Screenshots on iPhone Duo
+        if: steps.sim.outputs.duo != ''
+        continue-on-error: true
+        run: bash scripts/screenshots.sh "${{ steps.sim.outputs.duo }}" screenshots/duo
 
       - name: Upload screenshots
         if: always()

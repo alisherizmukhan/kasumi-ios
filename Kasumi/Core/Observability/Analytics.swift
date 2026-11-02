@@ -9,6 +9,7 @@ enum AnalyticsEvent: Sendable {
     case generationFinished(status: String, seconds: Int)
     case purchaseCompleted(productID: String)
     case savedToPhotos
+    case accountDeleted
 
     var name: String {
         switch self {
@@ -19,6 +20,7 @@ enum AnalyticsEvent: Sendable {
         case .generationFinished: "generation_finished"
         case .purchaseCompleted: "purchase_completed"
         case .savedToPhotos: "saved_to_photos"
+        case .accountDeleted: "account_deleted"
         }
     }
 
@@ -29,7 +31,7 @@ enum AnalyticsEvent: Sendable {
         case .generationStarted(let presetID): ["preset_id": presetID ?? "none"]
         case .generationFinished(let status, let seconds): ["status": status, "seconds": String(seconds)]
         case .purchaseCompleted(let productID): ["product_id": productID]
-        case .signedOut, .savedToPhotos: [:]
+        case .signedOut, .savedToPhotos, .accountDeleted: [:]
         }
     }
 }

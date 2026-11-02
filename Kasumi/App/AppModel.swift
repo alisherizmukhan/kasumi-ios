@@ -22,6 +22,7 @@ final class AppModel {
     var selectedTab: AppTab = .home
     /// A preset picked on Home that the Create screen should preselect.
     var draftPreset: Preset?
+    private(set) var hasSeenOnboarding = UserDefaults.standard.bool(forKey: AppSettings.onboardingDoneKey)
 
     let backend: any Backend
     let analytics: any Analytics
@@ -96,6 +97,24 @@ final class AppModel {
         analytics.track(.signedOut)
     }
 
+    func finishOnboarding() {
+        hasSeenOnboarding = true
+        if DemoScreen.current == nil {
+            UserDefaults.standard.set(true, forKey: AppSettings.onboardingDoneKey)
+        }
+    }
+
+    func deleteAccount() async throws {
+        try await backend.deleteAccount()
+        analytics.track(.accountDeleted)
+        signOut()
+    }
+
+    /// Live Activities need both the server flag and the user's setting.
+    var liveActivitiesAllowed: Bool {
+        config.liveActivitiesEnabled && AppSettings.liveActivities
+    }
+
     func refreshUser() async {
         if let fresh = try? await backend.currentUser() {
             user = fresh
@@ -111,7 +130,6 @@ final class AppModel {
     func openCreate(with preset: Preset) {
         draftPreset = preset
         selectedTab = .create
-        analytics.track(.presetOpened(id: preset.id))
     }
 
     // MARK: - Notifications
@@ -146,8 +164,9 @@ final class AppModel {
     // MARK: - Demo
 
     private func startDemo(_ screen: DemoScreen) async {
-        guard screen != .auth else {
+        guard screen != .auth, screen != .onboarding else {
             sessionStore.clear()
+            hasSeenOnboarding = screen == .auth
             authState = .signedOut
             return
         }

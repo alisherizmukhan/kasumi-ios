@@ -52,6 +52,14 @@ struct LiveBackend: Backend {
         try await client.send(.post("purchases/apple", body: PurchaseBody(productID: productID, transactionID: transactionID)))
     }
 
+    func billingHistory() async throws -> [BillingEntry] {
+        try await client.send(.get("billing"))
+    }
+
+    func deleteAccount() async throws {
+        let _: EmptyResponse = try await client.send(.post("account/delete", body: [String: String]()))
+    }
+
     private struct PurchaseBody: Encodable {
         let productID: String
         let transactionID: UInt64

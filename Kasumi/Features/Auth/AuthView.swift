@@ -13,38 +13,35 @@ struct AuthView: View {
         _viewModel = State(initialValue: AuthViewModel(app: app))
     }
 
+    @Environment(\.isWideLayout) private var isWide
+
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: Theme.Space.xxl) {
-                header
-                    .padding(.top, 64)
-
-                VStack(spacing: Theme.Space.m) {
-                    SignInWithAppleButton(.continue) { request in
-                        request.requestedScopes = [.fullName, .email]
-                    } onCompletion: { result in
-                        Task { await viewModel.handleApple(result) }
+        Group {
+            if isWide {
+                // iPhone Duo inner display: the pitch on the left, the sign-in form on the right.
+                GeometryReader { proxy in
+                    ScrollView {
+                        HStack(alignment: .center, spacing: 64) {
+                            header.frame(maxWidth: .infinity, alignment: .leading)
+                            signInForm.frame(width: 380)
+                        }
+                        .padding(.horizontal, Theme.Space.xxl)
+                        .frame(minHeight: proxy.size.height)
+                        .readableWidth(1000)
                     }
-                    .signInWithAppleButtonStyle(.white)
-                    .frame(height: 48)
-                    .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.control, style: .continuous))
-
-                    Button("Continue with Google") {
-                        Task { await viewModel.signInWithGoogle() }
-                    }
-                    .buttonStyle(SecondaryButtonStyle())
                 }
-
-                divider
-
-                emailForm
-
-                Text("One account for iOS and the web, with the same credits and videos")
-                    .font(.footnote)
-                    .foregroundStyle(Theme.textMuted)
+            } else {
+                ScrollView {
+                    VStack(alignment: .leading, spacing: Theme.Space.xxl) {
+                        header
+                            .padding(.top, 64)
+                        signInForm
+                    }
+                    .padding(.horizontal, Theme.Space.xl)
+                    .padding(.bottom, Theme.Space.xl)
+                    .readableWidth()
+                }
             }
-            .padding(.horizontal, Theme.Space.xl)
-            .padding(.bottom, Theme.Space.xl)
         }
         .scrollDismissesKeyboard(.interactively)
         .screenBackground()
@@ -55,6 +52,34 @@ struct AuthView: View {
             }
         }
         .errorAlert($viewModel.errorMessage)
+    }
+
+    private var signInForm: some View {
+        VStack(alignment: .leading, spacing: Theme.Space.xxl) {
+            VStack(spacing: Theme.Space.m) {
+                SignInWithAppleButton(.continue) { request in
+                    request.requestedScopes = [.fullName, .email]
+                } onCompletion: { result in
+                    Task { await viewModel.handleApple(result) }
+                }
+                .signInWithAppleButtonStyle(.white)
+                .frame(height: 48)
+                .clipShape(RoundedRectangle(cornerRadius: Theme.Radius.control, style: .continuous))
+
+                Button("Continue with Google") {
+                    Task { await viewModel.signInWithGoogle() }
+                }
+                .buttonStyle(SecondaryButtonStyle())
+            }
+
+            divider
+
+            emailForm
+
+            Text("One account for iOS and the web, with the same credits and videos")
+                .font(.footnote)
+                .foregroundStyle(Theme.textMuted)
+        }
     }
 
     private var header: some View {

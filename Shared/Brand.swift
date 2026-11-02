@@ -21,6 +21,7 @@ enum Brand {
     static let hairline = Color(hex: 0xEDEDED).opacity(0.08)
 
     static let negative = Color(hex: 0xE5484D)
+    static let positive = Color(hex: 0x4CC38A)
 }
 
 extension Color {

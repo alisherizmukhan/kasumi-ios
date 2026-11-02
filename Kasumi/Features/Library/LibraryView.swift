@@ -4,10 +4,14 @@ struct LibraryView: View {
     let app: AppModel
     @State private var viewModel: LibraryViewModel
 
-    private let columns = [
-        GridItem(.flexible(), spacing: Theme.Space.m),
-        GridItem(.flexible(), spacing: Theme.Space.m),
-    ]
+    @Environment(\.isWideLayout) private var isWide
+
+    private var columns: [GridItem] {
+        if isWide {
+            return [GridItem(.adaptive(minimum: 170), spacing: Theme.Space.m)]
+        }
+        return [GridItem(.flexible(), spacing: Theme.Space.m), GridItem(.flexible(), spacing: Theme.Space.m)]
+    }
 
     init(app: AppModel) {
         self.app = app

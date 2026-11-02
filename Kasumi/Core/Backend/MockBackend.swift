@@ -8,12 +8,14 @@ actor MockBackend: Backend {
     private var user: User
     private var generations: [Generation]
     private var startDates: [String: Date] = [:]
+    private var billing: [BillingEntry]
 
     init(latency: Duration = .milliseconds(500), generationDuration: TimeInterval = 20) {
         self.latency = latency
         self.generationDuration = generationDuration
         user = User(id: "user_demo", name: "Alex Rivera", email: "alex@kasumi.app", credits: 120, plan: .free)
         generations = Self.seedLibrary()
+        billing = Self.seedBilling()
     }
 
     func signIn(with provider: AuthProvider) async throws -> AuthSession {
@@ -59,6 +61,7 @@ actor MockBackend: Backend {
         )
         generations.insert(generation, at: 0)
         startDates[generation.id] = .now
+        record(.generation, title: generation.title, credits: -cost)
         return generation
     }
 
@@ -77,17 +80,41 @@ actor MockBackend: Backend {
     func redeemPurchase(productID: String, transactionID: UInt64) async throws -> User {
         try await delay()
         switch productID {
-        case "kasumi.credits.100": user.credits += 100
-        case "kasumi.credits.500": user.credits += 500
+        case "kasumi.credits.100":
+            user.credits += 100
+            record(.purchase, title: "100 credits", credits: 100, price: "$4.99")
+        case "kasumi.credits.500":
+            user.credits += 500
+            record(.purchase, title: "500 credits", credits: 500, price: "$19.99")
         case "kasumi.pro.monthly":
             user.plan = .pro
             user.credits += 300
-        default: throw BackendError.notFound
+            record(.subscription, title: "Kasumi Pro, monthly", credits: 300, price: "$9.99")
+        case "kasumi.pro.yearly":
+            user.plan = .pro
+            user.credits += 300
+            record(.subscription, title: "Kasumi Pro, yearly", credits: 300, price: "$79.99")
+        default:
+            throw BackendError.notFound
         }
         return user
     }
 
+    func billingHistory() async throws -> [BillingEntry] {
+        try await delay()
+        return billing
+    }
+
+    func deleteAccount() async throws {
+        try await delay()
+    }
+
     // MARK: - Simulation
+
+    private func record(_ kind: BillingEntry.Kind, title: String, credits: Int, price: String? = nil) {
+        let entry = BillingEntry(id: UUID().uuidString, date: .now, kind: kind, title: title, credits: credits, price: price)
+        billing.insert(entry, at: 0)
+    }
 
     private func delay() async throws {
         if latency > .zero { try await Task.sleep(for: latency) }
@@ -135,6 +162,20 @@ actor MockBackend: Backend {
             video: URL(string: video)!,
             thumbnail: URL(string: "https://picsum.photos/seed/\(seed)/600/800")!
         )
+    }
+
+    /// Adds up to the starting balance of 120 credits.
+    private static func seedBilling() -> [BillingEntry] {
+        func entry(_ id: String, hoursAgo: Double, _ kind: BillingEntry.Kind, _ title: String, _ credits: Int, _ price: String? = nil) -> BillingEntry {
+            BillingEntry(id: id, date: Date().addingTimeInterval(-hoursAgo * 3600), kind: kind, title: title, credits: credits, price: price)
+        }
+        return [
+            entry("b5", hoursAgo: 1, .generation, "Earth Zoom Out", -20),
+            entry("b4", hoursAgo: 2, .generation, "Neon Glow", -15),
+            entry("b3", hoursAgo: 3, .generation, "Dolly Zoom", -15),
+            entry("b2", hoursAgo: 30, .purchase, "100 credits", 100, "$4.99"),
+            entry("b1", hoursAgo: 24 * 40, .bonus, "Welcome credits", 70),
+        ]
     }
 
     private static func seedLibrary() -> [Generation] {

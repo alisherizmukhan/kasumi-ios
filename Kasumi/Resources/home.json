@@ -11,7 +11,9 @@
         "title": "Earth Zoom Out",
         "thumbnailURL": "https://picsum.photos/seed/earthzoom/400/600",
         "cost": 20,
-        "tag": "new"
+        "tag": "new",
+        "summary": "The camera starts at street level and pulls straight up until the whole region is in frame",
+        "exampleVideoURL": "https://test-videos.co.uk/vids/jellyfish/mp4/h264/720/Jellyfish_720_10s_2MB.mp4"
       }
     },
     {
@@ -19,11 +21,42 @@
       "id": "trending",
       "title": "Trending now",
       "items": [
-        { "id": "neon_glow", "title": "Neon Glow", "thumbnailURL": "https://picsum.photos/seed/neon/400/600", "cost": 15 },
-        { "id": "dolly_zoom", "title": "Dolly Zoom", "thumbnailURL": "https://picsum.photos/seed/dolly/400/600", "cost": 15 },
-        { "id": "slow_mo_hair", "title": "Slow-mo Hair", "thumbnailURL": "https://picsum.photos/seed/hair/400/600", "cost": 10 },
-        { "id": "disintegration", "title": "Disintegration", "thumbnailURL": "https://picsum.photos/seed/dust/400/600", "cost": 25 },
-        { "id": "anime_shift", "title": "Anime Shift", "thumbnailURL": "https://picsum.photos/seed/anime/400/600", "cost": 15 }
+        {
+          "id": "neon_glow",
+          "title": "Neon Glow",
+          "thumbnailURL": "https://picsum.photos/seed/neon/400/600",
+          "cost": 15,
+          "summary": "Turns the scene to night and lights the edges with soft neon, with a slow push-in",
+          "exampleVideoURL": "https://test-videos.co.uk/vids/sintel/mp4/h264/720/Sintel_720_10s_2MB.mp4"
+        },
+        {
+          "id": "dolly_zoom",
+          "title": "Dolly Zoom",
+          "thumbnailURL": "https://picsum.photos/seed/dolly/400/600",
+          "cost": 15,
+          "summary": "The camera moves back while zooming in, so the subject stays put and the background stretches"
+        },
+        {
+          "id": "slow_mo_hair",
+          "title": "Slow-mo Hair",
+          "thumbnailURL": "https://picsum.photos/seed/hair/400/600",
+          "cost": 10,
+          "summary": "A slow, close move with hair and fabric drifting in the wind"
+        },
+        {
+          "id": "disintegration",
+          "title": "Disintegration",
+          "thumbnailURL": "https://picsum.photos/seed/dust/400/600",
+          "cost": 25,
+          "summary": "The subject breaks into dust that drifts out of frame"
+        },
+        {
+          "id": "anime_shift",
+          "title": "Anime Shift",
+          "thumbnailURL": "https://picsum.photos/seed/anime/400/600",
+          "cost": 15,
+          "summary": "Redraws the photo as hand-drawn animation, with a gentle pan"
+        }
       ]
     },
     {
@@ -37,10 +70,35 @@
       "id": "camera_moves",
       "title": "Camera moves",
       "items": [
-        { "id": "crash_zoom", "title": "Crash Zoom", "thumbnailURL": "https://picsum.photos/seed/crash/400/600", "cost": 10 },
-        { "id": "orbit", "title": "360 Orbit", "thumbnailURL": "https://picsum.photos/seed/orbit/400/600", "cost": 15 },
-        { "id": "fpv_drone", "title": "FPV Drone", "thumbnailURL": "https://picsum.photos/seed/drone/400/600", "cost": 20, "tag": "new" },
-        { "id": "handheld", "title": "Handheld", "thumbnailURL": "https://picsum.photos/seed/handheld/400/600", "cost": 10 }
+        {
+          "id": "crash_zoom",
+          "title": "Crash Zoom",
+          "thumbnailURL": "https://picsum.photos/seed/crash/400/600",
+          "cost": 10,
+          "summary": "A fast zoom into the subject's face"
+        },
+        {
+          "id": "orbit",
+          "title": "360 Orbit",
+          "thumbnailURL": "https://picsum.photos/seed/orbit/400/600",
+          "cost": 15,
+          "summary": "The camera circles the subject once at eye level"
+        },
+        {
+          "id": "fpv_drone",
+          "title": "FPV Drone",
+          "thumbnailURL": "https://picsum.photos/seed/drone/400/600",
+          "cost": 20,
+          "tag": "new",
+          "summary": "A drone dives toward the subject and flies past it"
+        },
+        {
+          "id": "handheld",
+          "title": "Handheld",
+          "thumbnailURL": "https://picsum.photos/seed/handheld/400/600",
+          "cost": 10,
+          "summary": "Subtle handheld shake, like a phone held by a friend"
+        }
       ]
     }
   ]

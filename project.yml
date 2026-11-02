@@ -30,7 +30,11 @@ targets:
       properties:
         CFBundleDisplayName: Kasumi
         UILaunchScreen: {}
-        UISupportedInterfaceOrientations: [UIInterfaceOrientationPortrait]
+        # iPhone Duo's inner display is landscape when open, so the app supports both.
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+          - UIInterfaceOrientationLandscapeLeft
+          - UIInterfaceOrientationLandscapeRight
         NSSupportsLiveActivities: true
         NSCameraUsageDescription: Take a photo to turn it into a video.
         NSPhotoLibraryAddUsageDescription: Save your generated videos to Photos.

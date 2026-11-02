@@ -75,6 +75,31 @@
           "referenceName" : "Kasumi Pro Monthly",
           "subscriptionGroupID" : "21500001",
           "type" : "RecurringSubscription"
+        },
+        {
+          "adHocOffers" : [
+
+          ],
+          "codeOffers" : [
+
+          ],
+          "displayPrice" : "79.99",
+          "familyShareable" : false,
+          "groupNumber" : 1,
+          "internalID" : "6740000004",
+          "introductoryOffer" : null,
+          "localizations" : [
+            {
+              "description" : "300 credits every month and priority rendering",
+              "displayName" : "Kasumi Pro, yearly",
+              "locale" : "en_US"
+            }
+          ],
+          "productID" : "kasumi.pro.yearly",
+          "recurringSubscriptionPeriod" : "P1Y",
+          "referenceName" : "Kasumi Pro Yearly",
+          "subscriptionGroupID" : "21500001",
+          "type" : "RecurringSubscription"
         }
       ]
     }

@@ -21,6 +21,9 @@ struct Endpoint<Response: Decodable & Sendable>: Sendable {
     }
 }
 
+/// For endpoints that return no body (204) or an empty JSON object.
+struct EmptyResponse: Decodable, Sendable {}
+
 enum APIError: Error, Equatable, LocalizedError {
     case unauthorized
     case server(status: Int)
@@ -131,6 +134,9 @@ final class APIClient: Sendable {
         default: throw APIError.server(status: http.statusCode)
         }
 
+        if T.self == EmptyResponse.self, data.isEmpty, let empty = EmptyResponse() as? T {
+            return empty
+        }
         do {
             let decoder = JSONDecoder()
             decoder.dateDecodingStrategy = .iso8601

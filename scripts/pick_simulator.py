@@ -1,29 +1,31 @@
-"""Prints the UDID of an iPhone simulator whose iOS version is supported by the selected Xcode."""
+"""Prints the UDID of an available simulator.
+
+Usage: python3 scripts/pick_simulator.py "iPhone Duo"
+With a name, picks that device on the newest runtime that has it.
+Without one, picks the newest iPhone Pro (not Max, not Duo).
+"""
 import json
 import subprocess
 import sys
 
 
-def version(text):
-    return [int(part) for part in text.replace("-", ".").split(".") if part.isdigit()]
+def version(runtime):
+    return [int(part) for part in runtime.rsplit("iOS-", 1)[1].split("-") if part.isdigit()]
 
 
-sdk = version(subprocess.check_output(["xcrun", "--sdk", "iphonesimulator", "--show-sdk-version"], text=True).strip())
 devices = json.loads(subprocess.check_output(["xcrun", "simctl", "list", "devices", "available", "-j"]))["devices"]
+runtimes = sorted((r for r in devices if ".iOS-" in r), key=version, reverse=True)
+wanted = sys.argv[1] if len(sys.argv) > 1 else None
 
-runtimes = []
-for runtime, sims in devices.items():
-    if ".iOS-" not in runtime:
-        continue
-    runtime_version = version(runtime.rsplit("iOS-", 1)[1])
-    if runtime_version[:2] <= sdk[:2]:
-        runtimes.append((runtime_version, sims))
-
-for _, sims in sorted(runtimes, key=lambda item: item[0], reverse=True):
-    phones = [s for s in sims if s["name"].startswith("iPhone")]
-    preferred = [s for s in phones if "Pro" in s["name"] and "Max" not in s["name"]] or phones
-    if preferred:
-        print(preferred[0]["udid"])
+for runtime in runtimes:
+    sims = devices[runtime]
+    if wanted:
+        matches = [s for s in sims if s["name"] == wanted]
+    else:
+        phones = [s for s in sims if s["name"].startswith("iPhone") and "Duo" not in s["name"]]
+        matches = [s for s in phones if "Pro" in s["name"] and "Max" not in s["name"]] or phones
+    if matches:
+        print(matches[0]["udid"])
         sys.exit(0)
 
-sys.exit("No iPhone simulator found")
+sys.exit(f"No simulator found for {wanted or 'an iPhone'}")

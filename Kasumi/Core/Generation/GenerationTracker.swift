@@ -56,7 +56,9 @@ final class GenerationTracker {
         pollTasks[generation.id] = nil
         changeToken += 1
         analytics.track(.generationFinished(status: generation.status.rawValue, seconds: seconds))
-        Task { await notifications.notifyFinished(generation) }
+        if AppSettings.notifyWhenReady {
+            Task { await notifications.notifyFinished(generation) }
+        }
     }
 
     private func upsert(_ generation: Generation) {

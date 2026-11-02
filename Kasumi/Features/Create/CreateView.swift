@@ -5,6 +5,7 @@ struct CreateView: View {
     let app: AppModel
     @State private var viewModel: CreateViewModel
     @State private var showCamera = false
+    @Environment(\.isWideLayout) private var isWide
 
     init(app: AppModel) {
         self.app = app
@@ -13,18 +14,34 @@ struct CreateView: View {
 
     var body: some View {
         NavigationStack {
-            ScrollView {
-                VStack(alignment: .leading, spacing: Theme.Space.xxl) {
-                    if !app.generations.active.isEmpty {
-                        inProgressSection
+            Group {
+                if isWide {
+                    // iPhone Duo inner display: the photo on the left, the controls on the right.
+                    HStack(alignment: .top, spacing: Theme.Space.xl) {
+                        photoSection
+                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                        ScrollView {
+                            controls
+                        }
+                        .frame(width: 380)
                     }
-                    photoSection
-                    presetSection
-                    promptSection
-                    generateButton
+                    .padding(.horizontal, Theme.Space.l)
+                    .padding(.vertical, Theme.Space.s)
+                } else {
+                    ScrollView {
+                        VStack(alignment: .leading, spacing: Theme.Space.xxl) {
+                            if !app.generations.active.isEmpty {
+                                inProgressSection
+                            }
+                            photoSection
+                            presetSection
+                            promptSection
+                            generateButton
+                        }
+                        .padding(.horizontal, Theme.Space.l)
+                        .padding(.vertical, Theme.Space.s)
+                    }
                 }
-                .padding(.horizontal, Theme.Space.l)
-                .padding(.vertical, Theme.Space.s)
             }
             .scrollDismissesKeyboard(.interactively)
             .screenBackground()
@@ -52,6 +69,18 @@ struct CreateView: View {
 
     // MARK: - Sections
 
+    private var controls: some View {
+        VStack(alignment: .leading, spacing: Theme.Space.xxl) {
+            if !app.generations.active.isEmpty {
+                inProgressSection
+            }
+            presetSection
+            promptSection
+            generateButton
+        }
+        .padding(.bottom, Theme.Space.l)
+    }
+
     private var inProgressSection: some View {
         VStack(alignment: .leading, spacing: Theme.Space.m) {
             SectionHeader(title: "Rendering")
@@ -67,7 +96,7 @@ struct CreateView: View {
     private var photoSection: some View {
         if let image = viewModel.image {
             Color.clear
-                .frame(height: 320)
+                .frame(height: isWide ? nil : 320)
                 .overlay {
                     Image(uiImage: image).resizable().scaledToFill()
                 }
@@ -114,7 +143,7 @@ struct CreateView: View {
                 }
             }
             .padding(Theme.Space.xl)
-            .frame(maxWidth: .infinity, minHeight: 240)
+            .frame(maxWidth: .infinity, minHeight: 240, maxHeight: isWide ? .infinity : nil)
             .background(Theme.card, in: RoundedRectangle(cornerRadius: Theme.Radius.panel, style: .continuous))
             .overlay(
                 RoundedRectangle(cornerRadius: Theme.Radius.panel, style: .continuous)

@@ -12,6 +12,10 @@ protocol Backend: Sendable {
     func library() async throws -> [Generation]
     /// The server verifies the App Store transaction and grants credits.
     func redeemPurchase(productID: String, transactionID: UInt64) async throws -> User
+    /// Credits added and spent, newest first.
+    func billingHistory() async throws -> [BillingEntry]
+    /// Deletes the account and its data (required by App Review for apps with sign-up).
+    func deleteAccount() async throws
 }
 
 enum BackendError: Error, LocalizedError {

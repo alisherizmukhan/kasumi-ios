@@ -11,6 +11,7 @@ final class HomeViewModel {
     }
 
     private(set) var state: State = .loading
+    var path: [Preset] = []
     @ObservationIgnored private let app: AppModel
     @ObservationIgnored private var hasLoaded = false
 
@@ -25,8 +26,12 @@ final class HomeViewModel {
 
     func load() async {
         do {
-            state = .loaded(try await app.backend.homeScreen())
+            let screen = try await app.backend.homeScreen()
+            state = .loaded(screen)
             hasLoaded = true
+            if DemoScreen.current == .preset, path.isEmpty, let first = screen.allPresets.first {
+                path = [first]
+            }
         } catch {
             // Keep showing the last good layout on refresh failures.
             if case .loaded = state { return }
@@ -35,7 +40,15 @@ final class HomeViewModel {
         }
     }
 
+    /// Opens the preset's page.
     func open(_ preset: Preset) {
+        path.append(preset)
+        app.analytics.track(.presetOpened(id: preset.id))
+    }
+
+    /// Sends the preset to the Create tab.
+    func use(_ preset: Preset) {
         app.openCreate(with: preset)
+        path.removeAll()
     }
 }

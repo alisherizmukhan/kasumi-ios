@@ -7,11 +7,13 @@ struct KasumiApp: App {
 
     var body: some Scene {
         WindowGroup {
-            RootView()
-                .environment(app)
-                .preferredColorScheme(.dark)
-                .tint(Theme.accent)
-                .screenBackground()
+            WidthClassReader {
+                RootView()
+            }
+            .environment(app)
+            .preferredColorScheme(.dark)
+            .tint(Theme.accent)
+            .screenBackground()
         }
     }
 }
