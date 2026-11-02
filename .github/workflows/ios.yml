@@ -37,6 +37,9 @@ jobs:
           echo "duo=$(python3 scripts/pick_simulator.py 'iPhone Duo' || true)" >> "$GITHUB_OUTPUT"
 
       - name: Build & run tests
+        env:
+          # Also renders the iPhone Duo inner-display layout (see DuoInnerDisplaySnapshots).
+          TEST_RUNNER_SNAPSHOT_DIR: ${{ github.workspace }}/screenshots/duo-inner
         run: |
           set -o pipefail
           xcodebuild test \
@@ -50,6 +53,7 @@ jobs:
       - name: Screenshots on iPhone
         run: bash scripts/screenshots.sh "${{ steps.sim.outputs.iphone }}" screenshots/iphone
 
+      # The Duo simulator boots folded, so this captures the cover display.
       - name: Screenshots on iPhone Duo
         if: steps.sim.outputs.duo != ''
         continue-on-error: true

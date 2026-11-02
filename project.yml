@@ -29,6 +29,8 @@ targets:
       path: Kasumi/Info.plist
       properties:
         CFBundleDisplayName: Kasumi
+        CFBundleShortVersionString: $(MARKETING_VERSION)
+        CFBundleVersion: $(CURRENT_PROJECT_VERSION)
         UILaunchScreen: {}
         # iPhone Duo's inner display is landscape when open, so the app supports both.
         UISupportedInterfaceOrientations:

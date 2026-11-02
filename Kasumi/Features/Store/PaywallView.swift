@@ -10,8 +10,9 @@ struct PaywallView: View {
         _viewModel = State(initialValue: StoreViewModel(app: app))
     }
 
+    /// The plan the user picked, or the yearly plan until they pick one.
     private var selected: StoreProduct? {
-        viewModel.subscriptions.first { $0.id == selectedID }
+        viewModel.subscriptions.first { $0.id == selectedID } ?? viewModel.subscriptions.last
     }
 
     var body: some View {
@@ -48,9 +49,6 @@ struct PaywallView: View {
         }
         .task {
             await viewModel.load()
-            if selectedID == nil {
-                selectedID = viewModel.subscriptions.last?.id
-            }
         }
         .sheet(item: $viewModel.completedPurchase) { purchase in
             PurchaseSuccessView(purchase: purchase) {
@@ -102,7 +100,7 @@ struct PaywallView: View {
                         PlanOption(
                             plan: plan,
                             savings: plan.kind == .subscription(.year) ? viewModel.yearlySavings : nil,
-                            isSelected: plan.id == selectedID
+                            isSelected: plan.id == selected?.id
                         ) {
                             selectedID = plan.id
                         }

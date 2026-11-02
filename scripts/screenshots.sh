@@ -12,7 +12,7 @@ SCREENS="onboarding auth home preset create library detail profile store purchas
 mkdir -p "$OUT"
 xcrun simctl boot "$UDID" 2>/dev/null || true
 xcrun simctl bootstatus "$UDID" -b
-xcrun simctl status_bar "$UDID" override --time "9:41" --batteryState charged --batteryLevel 100 --wifiBars 3 --cellularBars 4 || true
+xcrun simctl status_bar "$UDID" override --time "9:41" --batteryState discharging --batteryLevel 100 --wifiBars 3 --cellularBars 4 || true
 xcrun simctl ui "$UDID" appearance dark || true
 xcrun simctl install "$UDID" "$APP"
 
