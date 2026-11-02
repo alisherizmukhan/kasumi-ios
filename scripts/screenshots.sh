@@ -16,9 +16,21 @@ xcrun simctl status_bar "$UDID" override --time "9:41" --batteryState charged --
 xcrun simctl ui "$UDID" appearance dark || true
 xcrun simctl install "$UDID" "$APP"
 
+# iPhone Duo has two displays (inner and outer); simctl then needs --display.
+# Ask once which displays exist: "id:name" pairs, empty on single-display devices.
+DISPLAYS=$(xcrun simctl io "$UDID" screenshot /tmp/kasumi-probe.png 2>&1 \
+  | sed -nE 's/.*--display=([0-9]+)[[:space:]]+([^[:space:]]+).*/\1:\2/p' || true)
+echo "displays: ${DISPLAYS:-single}"
+
 for screen in $SCREENS; do
   xcrun simctl launch --terminate-running-process "$UDID" "$BUNDLE_ID" -demoScreen "$screen"
   sleep 9
-  xcrun simctl io "$UDID" screenshot "$OUT/$screen.png"
+  if [ -z "$DISPLAYS" ]; then
+    xcrun simctl io "$UDID" screenshot "$OUT/$screen.png"
+  else
+    for display in $DISPLAYS; do
+      xcrun simctl io "$UDID" screenshot --display="${display%%:*}" "$OUT/$screen-${display#*:}.png" || true
+    done
+  fi
   echo "captured $screen"
 done
