@@ -15,7 +15,6 @@ This is the first MVP of a consumer generative-video app, built with SwiftUI + U
 <p align="center">
   <img src="docs/screenshots/detail.png" width="200" alt="Player">
   <img src="docs/screenshots/profile.png" width="200" alt="Profile">
-  <img src="docs/screenshots/store.png" width="200" alt="Store">
 </p>
 
 ## MVP scope

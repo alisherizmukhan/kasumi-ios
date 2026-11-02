@@ -28,15 +28,21 @@ struct CreditsBadge: View {
     let credits: Int
 
     var body: some View {
-        Label("\(credits)", systemImage: "bolt.fill")
-            .font(.subheadline.weight(.semibold))
-            .monospacedDigit()
-            .contentTransition(.numericText(value: Double(credits)))
-            .padding(.horizontal, 10)
-            .padding(.vertical, 5)
-            .background(Theme.card, in: Capsule())
-            .animation(.snappy, value: credits)
-            .accessibilityLabel("\(credits) credits")
+        // HStack instead of Label: toolbars render a Label as icon-only.
+        HStack(spacing: 4) {
+            Image(systemName: "bolt.fill")
+                .foregroundStyle(Theme.gradient)
+            Text("\(credits)")
+                .monospacedDigit()
+                .contentTransition(.numericText(value: Double(credits)))
+        }
+        .font(.subheadline.weight(.semibold))
+        .padding(.horizontal, 10)
+        .padding(.vertical, 5)
+        .background(Theme.card, in: Capsule())
+        .animation(.snappy, value: credits)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel("\(credits) credits")
     }
 }
 

@@ -124,15 +124,15 @@ actor MockBackend: Backend {
     }
 
     private static let samples: [Sample] = [
-        sample(file: "ForBiggerBlazes", seed: "blaze"),
-        sample(file: "ForBiggerEscapes", seed: "escape"),
-        sample(file: "ForBiggerFun", seed: "fun"),
-        sample(file: "ForBiggerJoyrides", seed: "joyride"),
+        sample(video: "https://test-videos.co.uk/vids/bigbuckbunny/mp4/h264/720/Big_Buck_Bunny_720_10s_2MB.mp4", seed: "blaze"),
+        sample(video: "https://test-videos.co.uk/vids/jellyfish/mp4/h264/720/Jellyfish_720_10s_2MB.mp4", seed: "escape"),
+        sample(video: "https://test-videos.co.uk/vids/sintel/mp4/h264/720/Sintel_720_10s_2MB.mp4", seed: "fun"),
+        sample(video: "https://download.samplelib.com/mp4/sample-10s.mp4", seed: "joyride"),
     ]
 
-    private static func sample(file: String, seed: String) -> Sample {
+    private static func sample(video: String, seed: String) -> Sample {
         Sample(
-            video: URL(string: "https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/\(file).mp4")!,
+            video: URL(string: video)!,
             thumbnail: URL(string: "https://picsum.photos/seed/\(seed)/600/800")!
         )
     }

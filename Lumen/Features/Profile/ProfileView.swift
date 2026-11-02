@@ -31,7 +31,7 @@ struct ProfileView: View {
                             Button {
                                 showStore = true
                             } label: {
-                                Label("Get more credits", systemImage: "bolt.badge.plus")
+                                Label("Get more credits", systemImage: "plus.circle.fill")
                             }
                         }
                     }
