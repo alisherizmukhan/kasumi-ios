@@ -29,15 +29,20 @@ struct HomeSkeleton: View {
         ScrollView {
             VStack(alignment: .leading, spacing: Theme.Space.xxl) {
                 SkeletonBlock(cornerRadius: Theme.Radius.panel)
+                    .frame(maxWidth: .infinity)
                     .frame(height: isWide ? 320 : 280)
 
                 VStack(alignment: .leading, spacing: Theme.Space.m) {
                     SkeletonBlock(cornerRadius: 6).frame(width: 140, height: 20)
-                    HStack(spacing: Theme.Space.m) {
-                        ForEach(0..<(isWide ? 5 : 3), id: \.self) { _ in
-                            SkeletonBlock().frame(width: 152, height: 216)
+                    // Like the real carousel, the row runs past the screen edge instead of widening the layout.
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: Theme.Space.m) {
+                            ForEach(0..<6, id: \.self) { _ in
+                                SkeletonBlock().frame(width: 152, height: 216)
+                            }
                         }
                     }
+                    .scrollDisabled(true)
                 }
             }
             .padding(.horizontal, Theme.Space.l)

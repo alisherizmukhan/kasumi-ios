@@ -14,19 +14,19 @@ This is the first MVP of a consumer generative-video app, built with SwiftUI + U
   <img src="docs/screenshots/iphone/onboarding.png" width="180" alt="Onboarding">
   <img src="docs/screenshots/iphone/home.png" width="180" alt="Home">
   <img src="docs/screenshots/iphone/preset.png" width="180" alt="Preset">
-  <img src="docs/screenshots/iphone/create.png" width="180" alt="Create">
+  <img src="docs/screenshots/iphone/create.png" width="180" alt="Create, rendering">
 </p>
 <p align="center">
+  <img src="docs/screenshots/iphone/ready.png" width="180" alt="Create, video ready">
   <img src="docs/screenshots/iphone/library.png" width="180" alt="Library">
   <img src="docs/screenshots/iphone/detail.png" width="180" alt="Player">
-  <img src="docs/screenshots/iphone/paywall.png" width="180" alt="Kasumi Pro">
-  <img src="docs/screenshots/iphone/purchased.png" width="180" alt="Payment complete">
+  <img src="docs/screenshots/iphone/profile.png" width="180" alt="Profile">
 </p>
 <p align="center">
+  <img src="docs/screenshots/iphone/paywall.png" width="180" alt="Kasumi Pro">
+  <img src="docs/screenshots/iphone/purchased.png" width="180" alt="Payment complete">
   <img src="docs/screenshots/iphone/billing.png" width="180" alt="Billing history">
   <img src="docs/screenshots/iphone/settings.png" width="180" alt="Settings">
-  <img src="docs/screenshots/iphone/profile.png" width="180" alt="Profile">
-  <img src="docs/screenshots/iphone/auth.png" width="180" alt="Sign in">
 </p>
 
 ### iPhone Duo, open (inner display, 890 × 626 pt)
@@ -72,7 +72,7 @@ This is the first MVP of a consumer generative-video app, built with SwiftUI + U
 | Sign in with Apple, Google, email (one account shared with web) | Credits and videos follow the user everywhere | `Features/Auth`, `AppModel` |
 | Server-driven home with presets and trends | Marketing changes the screen without an app release | `Models/HomeScreen.swift`, `Features/Home` |
 | Create: photo from gallery or camera + preset or prompt | The main mobile flow | `Features/Create` |
-| Generation status, notification and Live Activity | Rendering takes minutes, so the user shouldn't have to wait in the app | `Core/Generation`, `KasumiWidgets` |
+| Generation status (source photo, stage, time left, Ready card), notification and Live Activity | Rendering takes minutes, so the user shouldn't have to wait in the app | `Core/Generation`, `GenerationCards.swift`, `KasumiWidgets` |
 | Library with a video player | The reason users come back | `Features/Library` |
 | Save to Photos and share | Sharing is how the product grows | `GenerationDetailView` |
 | Credit packs, Kasumi Pro subscription, payment confirmation (StoreKit 2) | Revenue | `Features/Store` |
