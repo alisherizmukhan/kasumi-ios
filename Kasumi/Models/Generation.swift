@@ -25,6 +25,19 @@ struct Generation: Codable, Identifiable, Hashable, Sendable {
 
     var isFinished: Bool { status == .completed || status == .failed }
 
+    /// What the renderer is doing right now, in plain words.
+    var stage: String {
+        switch status {
+        case .queued: return "In queue"
+        case .completed: return "Ready"
+        case .failed: return "Failed"
+        case .processing:
+            if progress < 0.35 { return "Reading the scene" }
+            if progress < 0.75 { return "Moving the camera" }
+            return "Rendering frames"
+        }
+    }
+
     var title: String {
         if let presetTitle { return presetTitle }
         return prompt.isEmpty ? "Untitled" : String(prompt.prefix(40))

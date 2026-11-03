@@ -3,6 +3,7 @@ import SwiftUI
 struct HomeView: View {
     let app: AppModel
     @State private var viewModel: HomeViewModel
+    @Environment(\.isWideLayout) private var isWide
 
     init(app: AppModel) {
         self.app = app
@@ -14,7 +15,8 @@ struct HomeView: View {
             content
                 .screenBackground()
                 .navigationTitle("Kasumi")
-                .creditsToolbar(app.user?.credits)
+                .creditsToolbar(app)
+                .adaptiveTitleDisplay(isWide)
                 .navigationDestination(for: Preset.self) { preset in
                     PresetDetailView(preset: preset) { viewModel.use(preset) }
                 }
@@ -26,8 +28,7 @@ struct HomeView: View {
     private var content: some View {
         switch viewModel.state {
         case .loading:
-            ProgressView()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            HomeSkeleton()
         case .failed(let message):
             ContentUnavailableView {
                 Label("Couldn't load presets", systemImage: "wifi.exclamationmark")

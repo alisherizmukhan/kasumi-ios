@@ -28,14 +28,29 @@ struct RootView: View {
     }
 }
 
-/// On iPhone the tabs sit at the bottom. On iPhone Duo's inner display, which reports a
-/// regular width, iOS 18+ draws the same TabView as a compact bar at the top, like on iPad.
+/// The system draws the tab bar: a glass bar at the bottom on iPhone, and with labels next to
+/// the icons on iPhone Duo's wide inner display. The credits store opens as a sheet from any tab.
 struct MainTabView: View {
     @Environment(AppModel.self) private var app
 
     var body: some View {
         @Bindable var app = app
-        TabView(selection: $app.selectedTab) {
+        tabs(selection: $app.selectedTab)
+            .sheet(isPresented: $app.isStorePresented) {
+                NavigationStack {
+                    StoreView(app: app)
+                        .toolbar {
+                            ToolbarItem(placement: .cancellationAction) {
+                                Button("Close") { app.isStorePresented = false }
+                                    .foregroundStyle(Theme.textSecondary)
+                            }
+                        }
+                }
+            }
+    }
+
+    private func tabs(selection: Binding<AppTab>) -> some View {
+        TabView(selection: selection) {
             HomeView(app: app)
                 .tabItem { Label("Home", systemImage: "house") }
                 .tag(AppTab.home)

@@ -92,7 +92,7 @@ final class CreateViewModel {
         )
         do {
             let generation = try await app.backend.startGeneration(request)
-            app.generations.track(generation, liveActivity: app.liveActivitiesAllowed)
+            app.generations.track(generation, sourceImage: image, liveActivity: app.liveActivitiesAllowed)
             app.analytics.track(.generationStarted(presetID: request.presetID))
             prompt = ""
             await app.refreshUser()

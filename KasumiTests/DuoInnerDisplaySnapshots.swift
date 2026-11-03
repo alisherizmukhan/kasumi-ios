@@ -25,7 +25,7 @@ final class DuoInnerDisplaySnapshots: XCTestCase {
 
         for screen in DemoScreen.allCases {
             UserDefaults.standard.set(screen.rawValue, forKey: "demoScreen")
-            let app = AppModel(backend: MockBackend(latency: .milliseconds(100)))
+            let app = AppModel.live()
             await app.bootstrap()
 
             let host = UIHostingController(rootView: Self.root(app: app))
@@ -39,7 +39,7 @@ final class DuoInnerDisplaySnapshots: XCTestCase {
             window.isHidden = false
 
             // Let navigation, remote images and the demo flows settle.
-            try await Task.sleep(for: .seconds(6))
+            try await Task.sleep(for: .seconds(8))
 
             let image = UIGraphicsImageRenderer(bounds: window.bounds).image { _ in
                 window.drawHierarchy(in: window.bounds, afterScreenUpdates: true)

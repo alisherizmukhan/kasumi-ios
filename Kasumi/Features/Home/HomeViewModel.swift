@@ -20,7 +20,8 @@ final class HomeViewModel {
     }
 
     func loadIfNeeded() async {
-        guard !hasLoaded else { return }
+        // The loading demo stays on the skeleton so it can be photographed.
+        guard !hasLoaded, DemoScreen.current != .homeLoading else { return }
         await load()
     }
 

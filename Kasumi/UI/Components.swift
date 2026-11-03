@@ -24,26 +24,44 @@ struct RemoteImage: View {
     }
 }
 
-/// Balance in the toolbar: a figure and its unit, no icon.
+/// Balance in the toolbar. On iOS 26+ the toolbar draws the glass bubble around it,
+/// so the badge itself stays flat; older systems get a quiet surface instead.
 struct CreditsBadge: View {
     let credits: Int
 
     var body: some View {
-        HStack(spacing: Theme.Space.xs) {
+        HStack(spacing: 6) {
+            Circle()
+                .fill(Theme.accent)
+                .frame(width: 8, height: 8)
             Text("\(credits)")
+                .font(.subheadline.weight(.medium).monospacedDigit())
                 .foregroundStyle(Theme.textPrimary)
                 .contentTransition(.numericText(value: Double(credits)))
             Text("credits")
-                .foregroundStyle(Theme.textMuted)
+                .font(.subheadline)
+                .foregroundStyle(Theme.textSecondary)
         }
-        .font(.footnote.monospacedDigit())
-        .padding(.horizontal, Theme.Space.s)
-        .frame(height: 28)
-        .background(Theme.card, in: RoundedRectangle(cornerRadius: Theme.Radius.tag, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: Theme.Radius.tag, style: .continuous).strokeBorder(Theme.hairline))
+        .modifier(LegacyToolbarSurface())
         .animation(Theme.ease(0.3), value: credits)
         .accessibilityElement(children: .ignore)
         .accessibilityLabel("\(credits) credits")
+        .accessibilityHint("Opens the credits store")
+    }
+}
+
+/// Before iOS 26 toolbar items have no glass, so give the badge its own surface.
+private struct LegacyToolbarSurface: ViewModifier {
+    func body(content: Content) -> some View {
+        if #available(iOS 26, *) {
+            content.padding(.horizontal, Theme.Space.xs)
+        } else {
+            content
+                .padding(.horizontal, Theme.Space.m)
+                .frame(height: 32)
+                .background(Theme.card, in: Capsule())
+                .overlay(Capsule().strokeBorder(Theme.hairline))
+        }
     }
 }
 
@@ -147,12 +165,24 @@ extension View {
         background(Theme.background.ignoresSafeArea())
     }
 
-    func creditsToolbar(_ credits: Int?) -> some View {
+    /// The balance in the top bar; tapping it opens the credits store.
+    func creditsToolbar(_ app: AppModel) -> some View {
         toolbar {
             ToolbarItem(placement: .topBarTrailing) {
-                CreditsBadge(credits: credits ?? 0)
+                Button {
+                    app.isStorePresented = true
+                } label: {
+                    CreditsBadge(credits: app.user?.credits ?? 0)
+                }
+                .buttonStyle(.plain)
             }
         }
+    }
+
+    /// Large titles on a phone; on iPhone Duo's short, wide inner display an inline title
+    /// leaves more room for content.
+    func adaptiveTitleDisplay(_ isWide: Bool) -> some View {
+        navigationBarTitleDisplayMode(isWide ? .inline : .large)
     }
 
     func errorAlert(_ message: Binding<String?>) -> some View {

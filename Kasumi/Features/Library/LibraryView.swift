@@ -1,4 +1,5 @@
 import SwiftUI
+import UIKit
 
 struct LibraryView: View {
     let app: AppModel
@@ -23,21 +24,27 @@ struct LibraryView: View {
             content
                 .screenBackground()
                 .navigationTitle("Library")
-                .creditsToolbar(app.user?.credits)
+                .creditsToolbar(app)
+                .adaptiveTitleDisplay(isWide)
                 .navigationDestination(for: Generation.self) { generation in
                     GenerationDetailView(generation: generation, app: app)
                 }
         }
         // Reload when a generation starts or finishes.
         .task(id: app.generations.changeToken) { await viewModel.load() }
+        // Opened from a "Ready" card on the Create tab.
+        .task(id: app.libraryFocus) {
+            guard let generation = app.libraryFocus else { return }
+            viewModel.path = [generation]
+            app.libraryFocus = nil
+        }
     }
 
     @ViewBuilder
     private var content: some View {
         switch viewModel.state {
         case .loading:
-            ProgressView()
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
+            LibrarySkeleton(columns: columns)
         case .failed(let message):
             ContentUnavailableView {
                 Label("Couldn't load your library", systemImage: "wifi.exclamationmark")
@@ -69,7 +76,7 @@ struct LibraryView: View {
                             }
                             .buttonStyle(.plain)
                         } else {
-                            GenerationCell(generation: generation)
+                            GenerationCell(generation: generation, sourceImage: app.generations.sourceImages[item.id])
                         }
                     }
                 }
@@ -83,15 +90,26 @@ struct LibraryView: View {
 
 struct GenerationCell: View {
     let generation: Generation
+    /// The photo a rendering video started from, shown under its progress.
+    var sourceImage: UIImage?
 
     var body: some View {
         VStack(alignment: .leading, spacing: Theme.Space.s) {
-            RemoteImage(url: generation.thumbnailURL)
+            Group {
+                if let sourceImage, generation.thumbnailURL == nil {
+                    Color.clear.overlay {
+                        Image(uiImage: sourceImage).resizable().scaledToFill()
+                    }
+                    .clipped()
+                } else {
+                    RemoteImage(url: generation.thumbnailURL)
+                }
+            }
                 .aspectRatio(3 / 4, contentMode: .fit)
                 .overlay {
                     if !generation.isFinished {
                         ZStack {
-                            Theme.background.opacity(0.7)
+                            Theme.background.opacity(0.55)
                             ProgressRing(progress: generation.progress)
                                 .frame(width: 40, height: 40)
                         }

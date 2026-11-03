@@ -55,6 +55,17 @@ struct SettingsView: View {
                     ValueRow(title: "Version", value: Self.version, mono: true)
                 }
 
+                GroupedSection(
+                    header: "Remote config",
+                    footer: "Feature flags come from the server and change without an app update"
+                ) {
+                    ValueRow(title: "Live Activities", value: app.config.liveActivitiesEnabled ? "On" : "Off")
+                    RowDivider()
+                    ValueRow(title: "Store", value: app.config.storeEnabled ? "On" : "Off")
+                    RowDivider()
+                    ValueRow(title: "Max prompt length", value: "\(app.config.maxPromptLength)", mono: true)
+                }
+
                 GroupedSection(footer: "Deletes your videos, credits and account data. Active subscriptions are managed by Apple and need to be cancelled in Settings") {
                     Button {
                         confirmDelete = true

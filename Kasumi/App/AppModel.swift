@@ -22,6 +22,10 @@ final class AppModel {
     var selectedTab: AppTab = .home
     /// A preset picked on Home that the Create screen should preselect.
     var draftPreset: Preset?
+    /// The credits store, opened from the balance in any toolbar.
+    var isStorePresented = false
+    /// A video the Library tab should open.
+    var libraryFocus: Generation?
     private(set) var hasSeenOnboarding = UserDefaults.standard.bool(forKey: AppSettings.onboardingDoneKey)
 
     let backend: any Backend
@@ -48,7 +52,8 @@ final class AppModel {
 
     /// Swap `MockBackend()` for `LiveBackend(client: APIClient(baseURL: ...))` once the API is ready.
     static func live() -> AppModel {
-        AppModel(backend: MockBackend())
+        // The "ready" demo renders quickly so the screenshot shows a finished video.
+        AppModel(backend: MockBackend(generationDuration: DemoScreen.current == .ready ? 3 : 20))
     }
 
     // MARK: - Lifecycle
@@ -126,6 +131,11 @@ final class AppModel {
     }
 
     // MARK: - Navigation
+
+    func openLibrary(_ generation: Generation) {
+        libraryFocus = generation
+        selectedTab = .library
+    }
 
     func openCreate(with preset: Preset) {
         draftPreset = preset

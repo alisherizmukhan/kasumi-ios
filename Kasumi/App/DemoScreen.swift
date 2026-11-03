@@ -4,7 +4,7 @@ import Foundation
 /// CI uses it to capture screenshots of every screen on iPhone and iPhone Duo.
 enum DemoScreen: String, CaseIterable {
     case onboarding, auth
-    case home, preset, create, library, detail
+    case home, homeLoading, preset, create, ready, library, detail
     case profile, store, purchased, paywall, billing, settings
 
     static var current: DemoScreen? {
@@ -13,8 +13,8 @@ enum DemoScreen: String, CaseIterable {
 
     var tab: AppTab {
         switch self {
-        case .onboarding, .auth, .home, .preset: .home
-        case .create: .create
+        case .onboarding, .auth, .home, .homeLoading, .preset: .home
+        case .create, .ready: .create
         case .library, .detail: .library
         case .profile, .store, .purchased, .paywall, .billing, .settings: .profile
         }

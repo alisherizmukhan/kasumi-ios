@@ -7,7 +7,7 @@ UDID="$1"
 OUT="${2:-screenshots}"
 APP="build/Build/Products/Debug-iphonesimulator/Kasumi.app"
 BUNDLE_ID="com.alisherizmukhan.Kasumi"
-SCREENS="onboarding auth home preset create library detail profile store purchased paywall billing settings"
+SCREENS="onboarding auth home homeLoading preset create ready library detail profile store purchased paywall billing settings"
 
 mkdir -p "$OUT"
 xcrun simctl boot "$UDID" 2>/dev/null || true

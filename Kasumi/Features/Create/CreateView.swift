@@ -30,7 +30,7 @@ struct CreateView: View {
                 } else {
                     ScrollView {
                         VStack(alignment: .leading, spacing: Theme.Space.xxl) {
-                            if !app.generations.active.isEmpty {
+                            if hasGenerations {
                                 inProgressSection
                             }
                             photoSection
@@ -46,11 +46,14 @@ struct CreateView: View {
             .scrollDismissesKeyboard(.interactively)
             .screenBackground()
             .navigationTitle("Create")
-            .creditsToolbar(app.user?.credits)
+            .creditsToolbar(app)
+                .adaptiveTitleDisplay(isWide)
         }
         .task {
             await viewModel.loadPresets()
-            if DemoScreen.current == .create { await viewModel.prepareDemo() }
+            if DemoScreen.current == .create || DemoScreen.current == .ready {
+                await viewModel.prepareDemo()
+            }
         }
         .task(id: app.draftPreset) {
             guard let preset = app.draftPreset else { return }
@@ -71,7 +74,7 @@ struct CreateView: View {
 
     private var controls: some View {
         VStack(alignment: .leading, spacing: Theme.Space.xxl) {
-            if !app.generations.active.isEmpty {
+            if hasGenerations {
                 inProgressSection
             }
             presetSection
@@ -81,12 +84,27 @@ struct CreateView: View {
         .padding(.bottom, Theme.Space.l)
     }
 
+    private var hasGenerations: Bool {
+        !app.generations.active.isEmpty || !app.generations.recentlyFinished.isEmpty
+    }
+
     private var inProgressSection: some View {
         VStack(alignment: .leading, spacing: Theme.Space.m) {
-            SectionHeader(title: "Rendering")
+            SectionHeader(title: app.generations.active.isEmpty ? "Ready" : "Rendering")
             VStack(spacing: Theme.Space.s) {
                 ForEach(app.generations.active) { generation in
-                    ActiveGenerationRow(generation: generation)
+                    RenderingCard(
+                        generation: generation,
+                        sourceImage: app.generations.sourceImages[generation.id],
+                        secondsRemaining: app.generations.secondsRemaining(for: generation)
+                    )
+                }
+                ForEach(app.generations.recentlyFinished) { generation in
+                    ReadyCard(generation: generation) {
+                        app.openLibrary(generation)
+                    } onDismiss: {
+                        withAnimation(Theme.ease(0.3)) { app.generations.dismissFinished(generation) }
+                    }
                 }
             }
         }
@@ -254,7 +272,7 @@ struct ActiveGenerationRow: View {
                     .font(.subheadline.weight(.medium))
                     .foregroundStyle(Theme.textPrimary)
                     .lineLimit(1)
-                Text(generation.status.label)
+                Text(generation.stage)
                     .font(.footnote)
                     .foregroundStyle(Theme.textSecondary)
             }
