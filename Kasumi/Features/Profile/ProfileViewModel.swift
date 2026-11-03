@@ -46,7 +46,7 @@ final class ProfileViewModel {
         }
     }
 
-    static func summarize(videos: [Generation], billing: [BillingEntry], now: Date = .now, calendar: Calendar = .current) -> Summary {
+    nonisolated static func summarize(videos: [Generation], billing: [BillingEntry], now: Date = .now, calendar: Calendar = .current) -> Summary {
         let spent = billing
             .filter { $0.credits < 0 && calendar.isDate($0.date, equalTo: now, toGranularity: .month) }
             .reduce(0) { $0 - $1.credits }
